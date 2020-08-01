@@ -12,7 +12,7 @@
 		<h1>Блог про кондиціонери та кліматичне обладнання</h1>
 		<div>
 			<p><a href="../index.php">На головну</a></p>
-				<form method="post" action="index.php?action=<?=$_GET['action']?>&id=<?=$_GET['id']?>">
+				<form method="post" action="index.php?action=<?=$_GET['action']?>&id=<?=$_GET['id']?>" enctype="multipart/form-data">
 
 					<b>Назва статті</b>			
 						<input type="text" name="title" value="<?=$article['title']?>" class="form-control" autofocus required>

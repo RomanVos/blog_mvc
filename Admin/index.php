@@ -1,4 +1,5 @@
 <?php
+define("__PATH__", __DIR__);
 require_once '../database.php';
 require_once '../models/functions.php';
 

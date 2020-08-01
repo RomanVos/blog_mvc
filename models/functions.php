@@ -55,27 +55,61 @@ function articles_new($link, $title, $date, $content, $image)
 	return true;
 }
 
-
-function articles_edit($link, $id, $title, $date, $content, $image)
-{
+function validate($id, $title, $content, $date, $image) {
 	$title = trim($title);
 	$content = trim($content);
 	$date = trim($date);
 	$id = (int)$id;
 	$image = "img/".$image;
 
-	if($title == '')
+	return [
+		'title' => $title,
+		'content' => $content,
+		'date' => $date,
+		'id' => $id,
+		'image' => $image
+	];
+}
+
+function insert_to_articles($link, $data) {
+	$sql = "UPDATE articles SET title='%s', `date`='%s', content='%s', image='%s' WHERE id='%d'";
+	$query = sprintf($sql, mysqli_real_escape_string($link, $data['title']),
+		mysqli_real_escape_string($link, $data['date']),
+		mysqli_real_escape_string($link, $data['content']),
+		mysqli_real_escape_string($link, $data['image']),
+		$data['id']);
+
+	return mysqli_query($link, $query);
+}
+
+function save_img($img_path, $data) {
+	if(is_uploaded_file($data)) {
+		if(move_uploaded_file($data, $img_path)) {
+			echo "Sussecfully uploaded your image.";
+		}
+		else {
+			echo "Failed to move your image.";
+		}
+	}
+	else {
+		echo "Failed to upload your image.";
+	}
+}
+
+function articles_edit($link, $id, $title, $date, $content, $image)
+{
+	if ($_FILES['image']['tmp_name']) {
+		save_img(__PATH__ . "/../img/test/{$_FILES['image']['name']}", $_FILES['image']['tmp_name']);
+	}
+	$result = insert_to_articles($link, validate($id, $title, $content, $date, $image));
+
+
+
+	if($result['title'] == '')
 		return false;
 
-	$sql = "UPDATE articles SET title='%s', `date`='%s', content='%s', image='%s' WHERE id='%d'";
-	$query = sprintf($sql, mysqli_real_escape_string($link, $title),
-						 mysqli_real_escape_string($link, $date),
-						 mysqli_real_escape_string($link, $content),
-						 mysqli_real_escape_string($link, $image),
-						 $id);
-	$result = mysqli_query($link, $query);
 
-	if(!result)
+	if(!$result)
 		die(mysqli_error($link));
 
 	return mysqli_affected_rows($link);

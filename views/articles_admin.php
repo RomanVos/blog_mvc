@@ -20,17 +20,19 @@
 		<th>Видалення</th>
 	</tr>
 	<tr>
-		<?php foreach($articles as $v): ?>
-		<td> <?=$v['date']?> </td>
-		<td> <?=$v['title']?> </td>
-		<td>
-			<a href="index.php?action=edit&id=<?=$v['id']?>">Редагувати</a>
-		</td>
-		<td>
-			<a href="index.php?action=delete&id=<?=$v['id']?>">Видалити</a>
-		</td>
+		<?php if (is_array($articles)) : ?>
+			<?php foreach($articles as $v): ?>
+			<td> <?=$v['date']?> </td>
+			<td> <?=$v['title']?> </td>
+			<td>
+				<a href="index.php?action=edit&id=<?=$v['id']?>">Редагувати</a>
+			</td>
+			<td>
+				<a href="index.php?action=delete&id=<?=$v['id']?>">Видалити</a>
+			</td>
+			<?php endforeach ?>
+		<?php endif; ?>
 	</tr>
-		<?php endforeach ?>
 </table>
 
 		<footer>
